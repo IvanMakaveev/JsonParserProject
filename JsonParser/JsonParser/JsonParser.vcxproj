@@ -139,11 +139,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="JsonArray.cpp" />
+    <ClCompile Include="JsonBool.cpp" />
     <ClCompile Include="JsonNode.cpp" />
+    <ClCompile Include="JsonNull.cpp" />
+    <ClCompile Include="JsonNumber.cpp" />
+    <ClCompile Include="JsonObject.cpp" />
     <ClCompile Include="JsonParser.cpp" />
+    <ClCompile Include="JsonString.cpp" />
+    <ClCompile Include="MyString.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\Vector.hpp" />
+    <ClInclude Include="JsonArray.h" />
+    <ClInclude Include="JsonBool.h" />
     <ClInclude Include="JsonNode.h" />
+    <ClInclude Include="JsonNull.h" />
+    <ClInclude Include="JsonNumber.h" />
+    <ClInclude Include="JsonObject.h" />
+    <ClInclude Include="JsonString.h" />
+    <ClInclude Include="MyString.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

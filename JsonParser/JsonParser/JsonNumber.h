@@ -3,5 +3,9 @@
 
 class JsonNumber : public JsonNode
 {
+	double value;
+
+public:
+	JsonNumber(double number);
 };
 

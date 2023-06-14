@@ -3,5 +3,7 @@
 
 class JsonNull : public JsonNode
 {
+public:
+	JsonNull();
 };
 
