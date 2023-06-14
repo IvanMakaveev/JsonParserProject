@@ -139,7 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="JsonNode.cpp" />
     <ClCompile Include="JsonParser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="JsonNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
