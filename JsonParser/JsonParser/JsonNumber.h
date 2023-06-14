@@ -7,5 +7,7 @@ class JsonNumber : public JsonNode
 
 public:
 	JsonNumber(double number);
+
+	JsonNode* clone() const override;
 };
 

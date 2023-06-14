@@ -8,6 +8,21 @@ class JsonObject : public JsonNode
 	{
 		MyString key;
 		JsonNode* value;
+
+		void free();
+
+		void copyFrom(const ObjectValue& other);
+
+		void moveFrom(ObjectValue&& other);
+
+	public:
+		ObjectValue();
+		ObjectValue(const MyString& key, JsonNode* value);
+		ObjectValue(const ObjectValue& other);
+		ObjectValue(ObjectValue&& other);
+		ObjectValue& operator=(const ObjectValue& other);
+		ObjectValue& operator=(ObjectValue&& other);
+		~ObjectValue();
 	};
 
 	ObjectValue* values;
@@ -26,5 +41,7 @@ public:
 	JsonObject& operator=(const JsonObject& other);
 	JsonObject& operator=(JsonObject&& other);
 	~JsonObject();
+
+	JsonNode* clone() const override;
 };
 

@@ -5,3 +5,8 @@ JsonNull::JsonNull()
 {
 
 }
+
+JsonNode* JsonNull::clone() const
+{
+	return new JsonNull(*this);
+}

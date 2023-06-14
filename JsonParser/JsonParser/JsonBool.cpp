@@ -5,3 +5,8 @@ JsonBool::JsonBool(bool value)
 {
 
 }
+
+JsonNode* JsonBool::clone() const
+{
+	return new JsonBool(*this);
+}

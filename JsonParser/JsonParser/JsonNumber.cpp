@@ -5,3 +5,8 @@ JsonNumber::JsonNumber(double number)
 {
 
 }
+
+JsonNode* JsonNumber::clone() const
+{
+	return new JsonNumber(*this);
+}

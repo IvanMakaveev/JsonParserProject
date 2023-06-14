@@ -5,3 +5,8 @@ JsonString::JsonString(const MyString& text)
 {
 
 }
+
+JsonNode* JsonString::clone() const
+{
+	return new JsonString(*this);
+}

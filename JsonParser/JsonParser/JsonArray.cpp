@@ -96,3 +96,8 @@ JsonArray::~JsonArray()
 {
 	free();
 }
+
+JsonNode* JsonArray::clone() const
+{
+	return new JsonArray(*this);
+}

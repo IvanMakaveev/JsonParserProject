@@ -5,5 +5,7 @@ class JsonNull : public JsonNode
 {
 public:
 	JsonNull();
+
+	JsonNode* clone() const override;
 };
 

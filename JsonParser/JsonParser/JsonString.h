@@ -8,5 +8,7 @@ class JsonString : public JsonNode
 
 public:
 	JsonString(const MyString& text);
+
+	JsonNode* clone() const override;
 };
 

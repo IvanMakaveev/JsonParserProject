@@ -7,5 +7,7 @@ class JsonBool : public JsonNode
 
 public:
 	JsonBool(bool value);
+
+	JsonNode* clone() const override;
 };
 

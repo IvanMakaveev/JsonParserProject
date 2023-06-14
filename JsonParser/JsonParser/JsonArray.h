@@ -20,6 +20,6 @@ public:
 	JsonArray& operator=(JsonArray&& other);
 	~JsonArray();
 
-
+	JsonNode* clone() const override;
 };
 
