@@ -97,6 +97,23 @@ JsonArray::~JsonArray()
 	free();
 }
 
+void JsonArray::print(unsigned int nestingDepth) const
+{
+	static const char OPENING_BRACKET = '[';
+	static const char CLOSING_BRACKET = ']';
+
+	std::cout << OPENING_BRACKET << std::endl;
+
+	for (size_t i = 0; i < count; i++)
+	{
+		printIndentation(nestingDepth + 1);
+		values[i]->print(nestingDepth + 1);
+	}
+
+	printIndentation(nestingDepth);
+	std::cout << CLOSING_BRACKET << std::endl;
+}
+
 JsonNode* JsonArray::clone() const
 {
 	return new JsonArray(*this);

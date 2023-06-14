@@ -6,6 +6,11 @@ JsonNumber::JsonNumber(double number)
 
 }
 
+void JsonNumber::print(unsigned int nestingDepth) const
+{
+	std::cout << value << std::endl;
+}
+
 JsonNode* JsonNumber::clone() const
 {
 	return new JsonNumber(*this);

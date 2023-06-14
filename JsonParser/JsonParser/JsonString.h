@@ -9,6 +9,8 @@ class JsonString : public JsonNode
 public:
 	JsonString(const MyString& text);
 
+	void print(unsigned int nestingDepth) const override;
+
 	JsonNode* clone() const override;
 };
 

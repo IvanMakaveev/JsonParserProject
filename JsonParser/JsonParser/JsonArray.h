@@ -1,5 +1,6 @@
 #pragma once
 #include "JsonNode.h"
+#include "HelperFunctions.h"
 
 class JsonArray : public JsonNode
 {
@@ -19,6 +20,8 @@ public:
 	JsonArray& operator=(const JsonArray& other);
 	JsonArray& operator=(JsonArray&& other);
 	~JsonArray();
+
+	void print(unsigned int nestingDepth) const override;
 
 	JsonNode* clone() const override;
 };

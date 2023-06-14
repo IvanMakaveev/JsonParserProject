@@ -9,3 +9,8 @@ JsonNode::JsonNodeType JsonNode::getType() const
 {
 	return type;
 }
+
+void JsonNode::print() const
+{
+	print(0);
+}

@@ -1,6 +1,7 @@
 #pragma once
 #include "MyString.h"
 #include "JsonNode.h"
+#include "HelperFunctions.h"
 
 class JsonObject : public JsonNode
 {
@@ -23,6 +24,8 @@ class JsonObject : public JsonNode
 		ObjectValue& operator=(const ObjectValue& other);
 		ObjectValue& operator=(ObjectValue&& other);
 		~ObjectValue();
+
+		void print(unsigned int nestingDepth) const;
 	};
 
 	ObjectValue* values;
@@ -41,6 +44,8 @@ public:
 	JsonObject& operator=(const JsonObject& other);
 	JsonObject& operator=(JsonObject&& other);
 	~JsonObject();
+
+	void print(unsigned int nestingDepth) const override;
 
 	JsonNode* clone() const override;
 };

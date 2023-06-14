@@ -91,6 +91,23 @@ JsonObject::~JsonObject()
 	free();
 }
 
+void JsonObject::print(unsigned int nestingDepth) const
+{
+	static const char OPENING_BRACKET = '{';
+	static const char CLOSING_BRACKET = '}';
+
+	std::cout << OPENING_BRACKET << std::endl;
+
+	for (size_t i = 0; i < count; i++)
+	{
+		printIndentation(nestingDepth + 1);
+		values[i].print(nestingDepth + 1);
+	}
+
+	printIndentation(nestingDepth);
+	std::cout << CLOSING_BRACKET << std::endl;
+}
+
 JsonNode* JsonObject::clone() const
 {
 	return new JsonObject(*this);
@@ -161,4 +178,10 @@ JsonObject::ObjectValue& JsonObject::ObjectValue::operator=(ObjectValue&& other)
 JsonObject::ObjectValue::~ObjectValue()
 {
 	free();
+}
+
+void JsonObject::ObjectValue::print(unsigned int nestingDepth) const
+{
+	std::cout << key << ": ";
+	value->print(nestingDepth + 1);
 }
