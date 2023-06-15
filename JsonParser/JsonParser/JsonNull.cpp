@@ -8,7 +8,9 @@ JsonNull::JsonNull()
 
 void JsonNull::print(unsigned int nestingDepth) const
 {
-	std::cout << "null" << std::endl;
+	static const char NULL_TEXT[] = "null";
+
+	std::cout << NULL_TEXT;
 }
 
 JsonNode* JsonNull::clone() const

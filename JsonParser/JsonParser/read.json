@@ -1,0 +1,13 @@
+{
+	"TestMember1" : -35.42,
+	"TestText" : "Hello",
+	"TestBool" : true,
+	"TestBool2" : false,
+	"TestNull" : null,
+	"TestArray" : [ "hello", "welcome", "lol"],
+	"TestObject" : { 
+		"hello" : "there",
+		"randomKey" : 12,
+		"lol" : null
+		}
+}

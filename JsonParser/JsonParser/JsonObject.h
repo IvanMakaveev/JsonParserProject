@@ -46,6 +46,7 @@ public:
 	~JsonObject();
 
 	void print(unsigned int nestingDepth) const override;
+	void addMember(const MyString& key, JsonNode* value);
 
 	JsonNode* clone() const override;
 };

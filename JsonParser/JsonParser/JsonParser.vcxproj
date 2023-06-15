@@ -139,8 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="HelperFunctions.cpp" />
     <ClCompile Include="JsonArray.cpp" />
     <ClCompile Include="JsonBool.cpp" />
+    <ClCompile Include="JsonDataModel.cpp" />
     <ClCompile Include="JsonNode.cpp" />
     <ClCompile Include="JsonNull.cpp" />
     <ClCompile Include="JsonNumber.cpp" />
@@ -148,15 +150,19 @@
     <ClCompile Include="JsonParser.cpp" />
     <ClCompile Include="JsonString.cpp" />
     <ClCompile Include="MyString.cpp" />
+    <ClCompile Include="Startup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\Vector.hpp" />
+    <ClInclude Include="HelperFunctions.h" />
     <ClInclude Include="JsonArray.h" />
     <ClInclude Include="JsonBool.h" />
+    <ClInclude Include="JsonDataModel.h" />
     <ClInclude Include="JsonNode.h" />
     <ClInclude Include="JsonNull.h" />
     <ClInclude Include="JsonNumber.h" />
     <ClInclude Include="JsonObject.h" />
+    <ClInclude Include="JsonParser.h" />
     <ClInclude Include="JsonString.h" />
     <ClInclude Include="MyString.h" />
   </ItemGroup>

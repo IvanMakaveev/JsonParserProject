@@ -10,3 +10,8 @@ void printIndentation(unsigned int depth)
 		std::cout << INDENTATION_SYMBOL;
 	}
 }
+
+bool isDigit(char symbol)
+{
+	return symbol >= '0' && symbol <= '9';
+}

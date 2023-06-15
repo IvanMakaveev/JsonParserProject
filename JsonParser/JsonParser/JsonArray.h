@@ -22,6 +22,7 @@ public:
 	~JsonArray();
 
 	void print(unsigned int nestingDepth) const override;
+	void addNode(JsonNode* nodeToAdd);
 
 	JsonNode* clone() const override;
 };

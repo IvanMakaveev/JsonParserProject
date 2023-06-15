@@ -9,6 +9,16 @@ MyString::MyString(size_t size)
 	_data = new char[size + 1];
 	this->_size = size;
 }
+
+MyString::MyString(char data)
+{
+	char dataArr[2] = { 0 };
+	dataArr[0] = data;
+
+	ssoData[MyString::SSO_MAX_SIZE] = MyString::SSO_MAX_SIZE - 1;
+	strcpy(ssoData, dataArr);
+}
+
 MyString::MyString(const char* data)
 {
 	size_t currentSize = strlen(data);

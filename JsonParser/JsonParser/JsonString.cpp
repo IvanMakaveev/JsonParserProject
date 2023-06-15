@@ -10,7 +10,7 @@ void JsonString::print(unsigned int nestingDepth) const
 {
 	static const char STRING_SEPARATOR = '"';
 
-	std::cout << STRING_SEPARATOR << value << STRING_SEPARATOR << std::endl;
+	std::cout << STRING_SEPARATOR << value << STRING_SEPARATOR;
 }
 
 JsonNode* JsonString::clone() const

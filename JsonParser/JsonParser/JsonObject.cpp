@@ -95,6 +95,7 @@ void JsonObject::print(unsigned int nestingDepth) const
 {
 	static const char OPENING_BRACKET = '{';
 	static const char CLOSING_BRACKET = '}';
+	static const char MEMBER_SEPARATOR = ',';
 
 	std::cout << OPENING_BRACKET << std::endl;
 
@@ -102,10 +103,27 @@ void JsonObject::print(unsigned int nestingDepth) const
 	{
 		printIndentation(nestingDepth + 1);
 		values[i].print(nestingDepth + 1);
+		
+		if (i + 1 != count)
+		{
+			std::cout << MEMBER_SEPARATOR;
+		}
+
+		std::cout << std::endl;
 	}
 
 	printIndentation(nestingDepth);
-	std::cout << CLOSING_BRACKET << std::endl;
+	std::cout << CLOSING_BRACKET;
+}
+
+void JsonObject::addMember(const MyString& key, JsonNode* value)
+{
+	if (count == capacity)
+	{
+		resize(capacity * 2);
+	}
+
+	values[count++] = ObjectValue(key, value);
 }
 
 JsonNode* JsonObject::clone() const
@@ -182,6 +200,8 @@ JsonObject::ObjectValue::~ObjectValue()
 
 void JsonObject::ObjectValue::print(unsigned int nestingDepth) const
 {
-	std::cout << key << ": ";
+	static const char KEY_SEPARATOR = '"';
+
+	std::cout << KEY_SEPARATOR << key << KEY_SEPARATOR << ": ";
 	value->print(nestingDepth + 1);
 }

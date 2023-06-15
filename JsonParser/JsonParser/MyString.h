@@ -25,6 +25,7 @@ class MyString
 public:
 
 	MyString();
+	MyString(char data);
 	MyString(const char* data);
 
 	MyString(const MyString& other);

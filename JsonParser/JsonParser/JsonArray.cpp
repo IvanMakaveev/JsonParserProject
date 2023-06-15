@@ -101,6 +101,7 @@ void JsonArray::print(unsigned int nestingDepth) const
 {
 	static const char OPENING_BRACKET = '[';
 	static const char CLOSING_BRACKET = ']';
+	static const char ELEMENT_SEPARATOR = ',';
 
 	std::cout << OPENING_BRACKET << std::endl;
 
@@ -108,10 +109,27 @@ void JsonArray::print(unsigned int nestingDepth) const
 	{
 		printIndentation(nestingDepth + 1);
 		values[i]->print(nestingDepth + 1);
+
+		if (i + 1 != count)
+		{
+			std::cout << ELEMENT_SEPARATOR;
+		}
+
+		std::cout << std::endl;
 	}
 
 	printIndentation(nestingDepth);
-	std::cout << CLOSING_BRACKET << std::endl;
+	std::cout << CLOSING_BRACKET;
+}
+
+void JsonArray::addNode(JsonNode* nodeToAdd)
+{
+	if (count == capacity)
+	{
+		resize(capacity * 2);
+	}
+
+	values[count++] = nodeToAdd;
 }
 
 JsonNode* JsonArray::clone() const
