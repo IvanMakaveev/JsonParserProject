@@ -3,27 +3,36 @@
 void JsonDataModel::free()
 {
 	delete value;
+	value = nullptr;
 }
 
 void JsonDataModel::copyFrom(const JsonDataModel& other)
 {
-	value = other.value->clone();
+	hasInstance = other.hasInstance;
+
+	if (other.hasInstance)
+	{
+		value = other.value->clone();
+	}
 }
 
 void JsonDataModel::moveFrom(JsonDataModel&& other)
 {
 	value = other.value;
+	hasInstance = other.hasInstance;
+
 	other.value = nullptr;
+	other.hasInstance = false;
 }
 
-JsonDataModel::JsonDataModel() : value(nullptr)
+JsonDataModel::JsonDataModel() : value(nullptr), hasInstance(false)
 {
 
 }
 
 JsonDataModel::JsonDataModel(JsonNode* value) : value(value)
 {
-
+	hasInstance = value != nullptr;
 }
 
 JsonDataModel::JsonDataModel(const JsonDataModel& other)
@@ -61,4 +70,14 @@ JsonDataModel& JsonDataModel::operator=(JsonDataModel&& other)
 JsonDataModel::~JsonDataModel()
 {
 	free();
+}
+
+bool JsonDataModel::hasInstance() const
+{
+	return containsInstance;
+}
+
+void JsonDataModel::print() const
+{
+	value->print();
 }

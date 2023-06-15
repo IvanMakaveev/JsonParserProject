@@ -6,7 +6,8 @@
 class JsonDataModel
 {
 	JsonNode* value;
-	
+	bool containsInstance;
+
 	void free();
 	void copyFrom(const JsonDataModel& other);
 	void moveFrom(JsonDataModel&& other);
@@ -19,15 +20,12 @@ public:
 	JsonDataModel& operator=(JsonDataModel&& other);
 	~JsonDataModel();
 
-	void print() const
-	{
-		value->print();
-	}
+	bool hasInstance() const;
+	void print() const;
 
 	void search(const MyString& key) const
 	{
 		JsonArray result;
-		
 	}
 
 	void set(const MyString& path, const MyString& text);

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "JsonDataModel.h"
 #include "JsonParser.h"
+#include "JsonConsoleCommandFactory.h"
 
 int main()
 {
@@ -8,4 +9,13 @@ int main()
 
 	JsonDataModel model = JsonParser().read(ifs);
 	model.print();
+	ifs.close();
+
+	//ApplicationCommandExecutor app;
+
+	while (false)
+	{
+		JsonConsoleCommandFactory::getInstance().getCommand();
+		//app.executeCommand(...)
+	}
 }
