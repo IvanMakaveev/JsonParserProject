@@ -8,7 +8,7 @@ class JsonNumber : public JsonNode
 public:
 	JsonNumber(double number);
 
-	void print(unsigned int nestingDepth) const override;
+	void writeNested(std::ostream& os, unsigned int nestingDepth) const override;
 
 	JsonNode* clone() const override;
 };

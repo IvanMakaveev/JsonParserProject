@@ -3,22 +3,8 @@
 #include "JsonNumber.h"
 #include "JsonBool.h"
 #include "JsonNull.h"
+#include "HelperFunctions.h"
 #include <sstream>
-
-static bool isDigit(char symbol)
-{
-	return symbol >= '0' && symbol <= '9';
-}
-
-static int toNumber(char symbol)
-{
-	if (isDigit(symbol))
-	{
-		return symbol - '0';
-	}
-
-	throw std::runtime_error("A symbol that is not a number has been passed!");
-}
 
 static double convertToNumber(const MyString& text)
 {
@@ -327,7 +313,7 @@ JsonArray* JsonParser::parseArray(std::istream& inputStream)
 
 	while (currentToken.type != Token::TokenType::ARRAY_END)
 	{
-		result->addNode(parseToken(currentToken, inputStream));
+		result->addElement(parseToken(currentToken, inputStream));
 
 		currentToken = getNextToken(inputStream);
 		if (currentToken.type == Token::TokenType::COMMA)
@@ -377,4 +363,9 @@ JsonDataModel JsonParser::read(std::istream& inputStream)
 	JsonNode* root = parseToken(firstToken, inputStream);
 
 	return JsonDataModel(root);
+}
+
+void JsonParser::write(std::ostream& outputStream, JsonDataModel model)
+{
+	model.write(outputStream);
 }

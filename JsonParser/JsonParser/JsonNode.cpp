@@ -10,7 +10,12 @@ JsonNode::JsonNodeType JsonNode::getType() const
 	return type;
 }
 
-void JsonNode::print() const
+void JsonNode::writeFormatted(std::ostream& os) const
 {
-	print(0);
+	writeNested(os, 0);
+}
+
+void JsonNode::search(const MyString& key, Vector<const JsonNode*>& result) const
+{
+	return;
 }

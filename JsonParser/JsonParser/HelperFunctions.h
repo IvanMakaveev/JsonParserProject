@@ -1,3 +1,8 @@
 #pragma once
+#include <iostream>
 
-void printIndentation(unsigned int depth);
+void writeIndentation(std::ostream& os, unsigned int depth);
+
+bool isDigit(char symbol);
+
+unsigned int toNumber(char symbol);

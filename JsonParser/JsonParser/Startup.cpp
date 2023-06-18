@@ -1,6 +1,7 @@
 #include <iostream>
 #include "JsonDataModel.h"
 #include "JsonParser.h"
+#include "ApplicationCommandExecutor.h"
 #include "JsonConsoleCommandFactory.h"
 
 int main()
@@ -11,11 +12,18 @@ int main()
 	model.print();
 	ifs.close();
 
-	//ApplicationCommandExecutor app;
+	ApplicationCommandExecutor app;
 
 	while (false)
 	{
-		JsonConsoleCommandFactory::getInstance().getCommand();
-		//app.executeCommand(...)
+		try
+		{
+			app.runCommand(JsonConsoleCommandFactory::getInstance().getCommand());
+		}
+		catch (const std::exception& exc)
+		{
+			std::cout << "An error has occured!!!" << std::endl;
+			std::cout << exc.what() << std::endl;
+		}
 	}
 }

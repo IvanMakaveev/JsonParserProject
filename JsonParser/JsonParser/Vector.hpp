@@ -97,6 +97,11 @@ void Vector<T>::moveFrom(Vector<T>&& other)
 template <typename T>
 void Vector<T>::resize(size_t newCapacity)
 {
+	if (newCapacity < size)
+	{
+		throw std::logic_error("An error has occured during resizing of Vector!");
+	}
+
 	T* newData = new T[newCapacity];
 
 	for (size_t i = 0; i < size; i++)
@@ -106,6 +111,7 @@ void Vector<T>::resize(size_t newCapacity)
 
 	delete[] data;
 	data = newData;
+	capacity = newCapacity;
 }
 
 /*

@@ -52,18 +52,28 @@ void JsonArray::resize(size_t newCapacity)
 	values = newNodes;
 }
 
+unsigned int JsonArray::getElementId(const MyString& key) const
+{
+	if (key.length() != 1 || !isDigit(key[0]))
+	{
+		throw std::runtime_error("Cannot acces arrays with non-digit key!");
+	}
+
+	return toNumber(key[0]);
+}
+
 JsonArray::JsonArray() 
-	: JsonNode(JsonNode::JsonNodeType::ArrayNode), capacity(8), count(0)
+	: JsonCollection(JsonNode::JsonNodeType::ArrayNode), capacity(8), count(0)
 {
 	values = new JsonNode * [capacity];
 }
 
-JsonArray::JsonArray(const JsonArray& other) : JsonNode(other)
+JsonArray::JsonArray(const JsonArray& other) : JsonCollection(other)
 {
 	copyFrom(other);
 }
 
-JsonArray::JsonArray(JsonArray&& other) : JsonNode(std::move(other))
+JsonArray::JsonArray(JsonArray&& other) : JsonCollection(std::move(other))
 {
 	moveFrom(std::move(other));
 }
@@ -97,32 +107,32 @@ JsonArray::~JsonArray()
 	free();
 }
 
-void JsonArray::print(unsigned int nestingDepth) const
+void JsonArray::writeNested(std::ostream& os, unsigned int nestingDepth) const
 {
 	static const char OPENING_BRACKET = '[';
 	static const char CLOSING_BRACKET = ']';
 	static const char ELEMENT_SEPARATOR = ',';
 
-	std::cout << OPENING_BRACKET << std::endl;
+	os << OPENING_BRACKET << std::endl;
 
 	for (size_t i = 0; i < count; i++)
 	{
-		printIndentation(nestingDepth + 1);
-		values[i]->print(nestingDepth + 1);
+		writeIndentation(os, nestingDepth + 1);
+		values[i]->writeNested(os, nestingDepth + 1);
 
 		if (i + 1 != count)
 		{
-			std::cout << ELEMENT_SEPARATOR;
+			os << ELEMENT_SEPARATOR;
 		}
 
-		std::cout << std::endl;
+		os << std::endl;
 	}
 
-	printIndentation(nestingDepth);
-	std::cout << CLOSING_BRACKET;
+	writeIndentation(os, nestingDepth);
+	os << CLOSING_BRACKET;
 }
 
-void JsonArray::addNode(JsonNode* nodeToAdd)
+void JsonArray::addElement(JsonNode* nodeToAdd)
 {
 	if (count == capacity)
 	{

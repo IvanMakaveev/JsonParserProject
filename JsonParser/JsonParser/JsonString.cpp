@@ -6,11 +6,11 @@ JsonString::JsonString(const MyString& text)
 
 }
 
-void JsonString::print(unsigned int nestingDepth) const
+void JsonString::writeNested(std::ostream& os, unsigned int nestingDepth) const
 {
 	static const char STRING_SEPARATOR = '"';
 
-	std::cout << STRING_SEPARATOR << value << STRING_SEPARATOR;
+	os << STRING_SEPARATOR << value << STRING_SEPARATOR;
 }
 
 JsonNode* JsonString::clone() const

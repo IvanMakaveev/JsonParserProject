@@ -8,9 +8,7 @@ void JsonDataModel::free()
 
 void JsonDataModel::copyFrom(const JsonDataModel& other)
 {
-	hasInstance = other.hasInstance;
-
-	if (other.hasInstance)
+	if (other.hasInstance())
 	{
 		value = other.value->clone();
 	}
@@ -19,20 +17,18 @@ void JsonDataModel::copyFrom(const JsonDataModel& other)
 void JsonDataModel::moveFrom(JsonDataModel&& other)
 {
 	value = other.value;
-	hasInstance = other.hasInstance;
 
 	other.value = nullptr;
-	other.hasInstance = false;
 }
 
-JsonDataModel::JsonDataModel() : value(nullptr), hasInstance(false)
+JsonDataModel::JsonDataModel() : value(nullptr)
 {
 
 }
 
 JsonDataModel::JsonDataModel(JsonNode* value) : value(value)
 {
-	hasInstance = value != nullptr;
+
 }
 
 JsonDataModel::JsonDataModel(const JsonDataModel& other)
@@ -42,7 +38,7 @@ JsonDataModel::JsonDataModel(const JsonDataModel& other)
 
 JsonDataModel::JsonDataModel(JsonDataModel&& other)
 {
-	std::move(other);
+	moveFrom(std::move(other));
 }
 
 JsonDataModel& JsonDataModel::operator=(const JsonDataModel& other)
@@ -74,10 +70,15 @@ JsonDataModel::~JsonDataModel()
 
 bool JsonDataModel::hasInstance() const
 {
-	return containsInstance;
+	return value != nullptr;
 }
 
 void JsonDataModel::print() const
 {
-	value->print();
+	if (!hasInstance())
+	{
+		throw std::runtime_error("Cannot print uninitialized Json Data Model!");
+	}
+
+	value->writeFormatted(std::cout);
 }

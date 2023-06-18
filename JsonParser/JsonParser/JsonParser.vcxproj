@@ -139,9 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CreateCommand.cpp" />
+    <ClCompile Include="DeleteCommand.cpp" />
     <ClCompile Include="HelperFunctions.cpp" />
     <ClCompile Include="JsonArray.cpp" />
     <ClCompile Include="JsonBool.cpp" />
+    <ClCompile Include="JsonCollection.cpp" />
     <ClCompile Include="JsonCommand.cpp" />
     <ClCompile Include="JsonConsoleCommandFactory.cpp" />
     <ClCompile Include="JsonDataModel.cpp" />
@@ -152,10 +155,21 @@
     <ClCompile Include="JsonParser.cpp" />
     <ClCompile Include="JsonString.cpp" />
     <ClCompile Include="MyString.cpp" />
+    <ClCompile Include="PrintCommand.cpp" />
+    <ClCompile Include="ReadFromFileCommand.cpp" />
+    <ClCompile Include="SaveToFileCommand.cpp" />
+    <ClCompile Include="SearchCommand.cpp" />
+    <ClCompile Include="SetCommand.cpp" />
     <ClCompile Include="Startup.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\Vector.hpp" />
+    <ClInclude Include="CreateCommand.h" />
+    <ClInclude Include="DeleteCommand.h" />
+    <ClInclude Include="JsonCollection.h" />
+    <ClInclude Include="ReadFromFileCommand.h" />
+    <ClInclude Include="SaveToFileCommand.h" />
+    <ClInclude Include="SetCommand.h" />
+    <ClInclude Include="Vector.hpp" />
     <ClInclude Include="HelperFunctions.h" />
     <ClInclude Include="JsonArray.h" />
     <ClInclude Include="JsonBool.h" />
@@ -169,6 +183,8 @@
     <ClInclude Include="JsonParser.h" />
     <ClInclude Include="JsonString.h" />
     <ClInclude Include="MyString.h" />
+    <ClInclude Include="PrintCommand.h" />
+    <ClInclude Include="SearchCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

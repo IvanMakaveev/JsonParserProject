@@ -47,17 +47,17 @@ void JsonObject::resize(size_t newCapacity)
 }
 
 JsonObject::JsonObject()
-	: JsonNode(JsonNode::JsonNodeType::ObjectNode), capacity(8), count(0)
+	: JsonCollection(JsonNode::JsonNodeType::ObjectNode), capacity(8), count(0)
 {
 	values = new ObjectValue[capacity];
 }
 
-JsonObject::JsonObject(const JsonObject& other) : JsonNode(other)
+JsonObject::JsonObject(const JsonObject& other) : JsonCollection(other)
 {
 	copyFrom(other);
 }
 
-JsonObject::JsonObject(JsonObject&& other) : JsonNode(std::move(other))
+JsonObject::JsonObject(JsonObject&& other) : JsonCollection(std::move(other))
 {
 	moveFrom(std::move(other));
 }
@@ -91,29 +91,29 @@ JsonObject::~JsonObject()
 	free();
 }
 
-void JsonObject::print(unsigned int nestingDepth) const
+void JsonObject::writeNested(std::ostream& os, unsigned int nestingDepth) const
 {
 	static const char OPENING_BRACKET = '{';
 	static const char CLOSING_BRACKET = '}';
 	static const char MEMBER_SEPARATOR = ',';
 
-	std::cout << OPENING_BRACKET << std::endl;
+	os << OPENING_BRACKET << std::endl;
 
 	for (size_t i = 0; i < count; i++)
 	{
-		printIndentation(nestingDepth + 1);
-		values[i].print(nestingDepth + 1);
+		writeIndentation(os, nestingDepth + 1);
+		values[i].write(os, nestingDepth + 1);
 		
 		if (i + 1 != count)
 		{
-			std::cout << MEMBER_SEPARATOR;
+			os << MEMBER_SEPARATOR;
 		}
 
-		std::cout << std::endl;
+		os << std::endl;
 	}
 
-	printIndentation(nestingDepth);
-	std::cout << CLOSING_BRACKET;
+	writeIndentation(os, nestingDepth);
+	os << CLOSING_BRACKET;
 }
 
 void JsonObject::addMember(const MyString& key, JsonNode* value)
@@ -198,10 +198,20 @@ JsonObject::ObjectValue::~ObjectValue()
 	free();
 }
 
-void JsonObject::ObjectValue::print(unsigned int nestingDepth) const
+void JsonObject::ObjectValue::write(std::ostream& os, unsigned int nestingDepth) const
 {
 	static const char KEY_SEPARATOR = '"';
 
-	std::cout << KEY_SEPARATOR << key << KEY_SEPARATOR << ": ";
-	value->print(nestingDepth + 1);
+	os << KEY_SEPARATOR << key << KEY_SEPARATOR << ": ";
+	value->writeNested(os, nestingDepth + 1);
+}
+
+const MyString& JsonObject::ObjectValue::getKey() const
+{
+	return key;
+}
+
+JsonNode* JsonObject::ObjectValue::getValue()
+{
+	return value;
 }

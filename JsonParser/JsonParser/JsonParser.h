@@ -55,13 +55,5 @@ class JsonParser
 public:
 	JsonDataModel read(std::istream& inputStream);
 
-	void write(const MyString& path)
-	{
-
-	}
-
-	void validate()
-	{
-
-	}
+	void write(std::ostream& outputStream, JsonDataModel model);
 };

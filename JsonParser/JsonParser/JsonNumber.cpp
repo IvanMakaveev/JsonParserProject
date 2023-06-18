@@ -6,9 +6,9 @@ JsonNumber::JsonNumber(double number)
 
 }
 
-void JsonNumber::print(unsigned int nestingDepth) const
+void JsonNumber::writeNested(std::ostream& os, unsigned int nestingDepth) const
 {
-	std::cout << value;
+	os << value;
 }
 
 JsonNode* JsonNumber::clone() const
