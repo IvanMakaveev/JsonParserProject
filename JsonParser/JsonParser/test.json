@@ -1,0 +1,24 @@
+{
+	TestMember1": {
+			"asd": "hehehe",
+			"asd2": [
+					"asd",
+					"asdasdasdasda",
+					2313
+				]
+		},
+	"TestMember1": "Hello",
+	"TestBool": true,
+	"TestBool2": false,
+	"TestNull": null,
+	"TestArray": [
+			"hello",
+			"welcome",
+			"lol"
+		],
+	"TestObject": {
+			"hello": "there",
+			"randomKey": 12,
+			"lol": null
+		}
+}

@@ -1,6 +1,7 @@
 #pragma once
 #include "JsonCommand.h"
 
+// Command for searching in JSON Data Model
 class SearchCommand :public JsonCommand
 {
 	MyString searchKey;

@@ -2,6 +2,7 @@
 #include "MyString.h"
 #include "JsonNode.h"
 
+// JSON String value node
 class JsonString : public JsonNode
 {
 	MyString value;

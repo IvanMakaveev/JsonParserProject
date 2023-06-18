@@ -1,5 +1,11 @@
 #include "ApplicationCommandExecutor.h"
 #include "ReadFromFileCommand.h"
+#include "ExitCommand.h"
+
+void ApplicationCommandExecutor::printLineSeparator() const
+{
+	std::cout << "================================" << std::endl;
+}
 
 void ApplicationCommandExecutor::printHelp() const
 {
@@ -11,7 +17,8 @@ void ApplicationCommandExecutor::printHelp() const
 	std::cout << "delete \"model path\"" << std::endl;
 	std::cout << "save [\"model path\"]" << std::endl;
 	std::cout << "saveas \"new file path\" [\"model path\"]" << std::endl;
-	std::cout << "===================================" << std::endl;
+	std::cout << "exit" << std::endl;
+	printLineSeparator();
 }
 
 ApplicationCommandExecutor::ApplicationCommandExecutor()
@@ -22,24 +29,36 @@ ApplicationCommandExecutor::ApplicationCommandExecutor()
 	printHelp();
 }
 
-void ApplicationCommandExecutor::runCommand(JsonCommand* command)
+bool ApplicationCommandExecutor::runCommand(JsonCommand* command)
 {
 	if (command == nullptr)
 	{
+		printLineSeparator();
 		std::cout << "It appears you have given an incorrect command!" << std::endl;
 		std::cout << "Please use one of the following commands:" << std::endl;
 		printHelp();
-		return;
+		return false;
+	}
+
+	if (dynamic_cast<ExitCommand*>(command) != nullptr)
+	{
+		return true;
 	}
 
 	if (!model.hasInstance() && dynamic_cast<ReadFromFileCommand*>(command) == nullptr)
 	{
+		printLineSeparator();
 		std::cout << "Before using any other commands, please load a JSON file!" << std::endl;
-		delete command;
-		return;
+		printLineSeparator();
+	}
+	else
+	{
+		command->execute(model);
+		printLineSeparator();
+		std::cout << "Command execution complete!" << std::endl;
+		printLineSeparator();
 	}
 
-	command->execute(model);
-
 	delete command;
+	return false;
 }

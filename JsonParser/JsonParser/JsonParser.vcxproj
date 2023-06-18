@@ -139,8 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ApplicationCommandExecutor.cpp" />
     <ClCompile Include="CreateCommand.cpp" />
     <ClCompile Include="DeleteCommand.cpp" />
+    <ClCompile Include="ExitCommand.cpp" />
     <ClCompile Include="HelperFunctions.cpp" />
     <ClCompile Include="JsonArray.cpp" />
     <ClCompile Include="JsonBool.cpp" />
@@ -163,8 +165,10 @@
     <ClCompile Include="Startup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ApplicationCommandExecutor.h" />
     <ClInclude Include="CreateCommand.h" />
     <ClInclude Include="DeleteCommand.h" />
+    <ClInclude Include="ExitCommand.h" />
     <ClInclude Include="JsonCollection.h" />
     <ClInclude Include="ReadFromFileCommand.h" />
     <ClInclude Include="SaveToFileCommand.h" />

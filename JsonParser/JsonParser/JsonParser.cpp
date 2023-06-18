@@ -48,11 +48,20 @@ static double convertToNumber(const MyString& text)
 	return isNegative ? -result : result;
 }
 
+MyString JsonParser::getNewErrorText(const MyString& oldErrorText) const
+{
+	MyString result(oldErrorText);
+	result += " The given error has occured on line: ";
+	result += toString(linesCounter);
+
+	return result;
+}
+
 char JsonParser::getNextChar(std::istream& inputStream)
 {
 	static const size_t WHITESPACE_COUNT = 3;
 	static const char WHITESPACE_CHARS[WHITESPACE_COUNT + 1] = "\n\t ";
-
+	static const char NEW_LINE = '\n';
 	do
 	{
 		char current = '\0';
@@ -69,6 +78,10 @@ char JsonParser::getNextChar(std::istream& inputStream)
 			if (WHITESPACE_CHARS[i] == current)
 			{
 				isWhiteSpace = true;
+				if (current == NEW_LINE)
+				{
+					linesCounter++;
+				}
 			}
 		}
 
@@ -190,12 +203,12 @@ JsonParser::Token JsonParser::createNumberToken(std::istream& inputStream, char 
 
 	while (isDigit(current) || current == DECIMAL_SEPARATOR)
 	{
-		result.value += current;
-
 		if (inputStream.eof())
 		{
 			return result;
 		}
+
+		result.value += current;
 
 		inputStream.get(current);
 	}
@@ -258,48 +271,57 @@ JsonParser::Token JsonParser::getNextToken(std::istream& inputStream)
 		return createNumberToken(inputStream, current);
 	}
 
-	throw std::runtime_error("Symbol not matching any expected literal!");
+	throw std::runtime_error("Symbol not matching any expected literal! Perhaps there is a missing format token!");
 }
 
 JsonObject* JsonParser::parseObject(std::istream& inputStream)
 {
 	JsonObject* result = new JsonObject();
 
-	Token currentToken = getNextToken(inputStream);
-
-	while (currentToken.type != Token::TokenType::OBJECT_END)
+	try
 	{
-		if (currentToken.type != Token::TokenType::STRING)
+		Token currentToken = getNextToken(inputStream);
+
+		while (currentToken.type != Token::TokenType::OBJECT_END)
 		{
-			throw std::runtime_error("Member key is missing!");
-		}
-
-		MyString key = std::move(currentToken.value);
-
-		currentToken = getNextToken(inputStream);
-		if (currentToken.type != Token::TokenType::COLON)
-		{
-			throw std::runtime_error("No colon between key and value of object member!");
-		}
-
-		currentToken = getNextToken(inputStream);
-		JsonNode* value = parseToken(currentToken, inputStream);
-		
-		result->addMember(key, value);
-
-		currentToken = getNextToken(inputStream);
-		if (currentToken.type == Token::TokenType::COMMA)
-		{
-			currentToken = getNextToken(inputStream);
-			if (currentToken.type == Token::TokenType::OBJECT_END)
+			if (currentToken.type != Token::TokenType::STRING)
 			{
-				throw std::runtime_error("Incorrect formatting of Json Object! Comman followed by end of object!");
+				throw std::runtime_error("Member key is missing!");
+			}
+
+			MyString key = std::move(currentToken.value);
+
+			currentToken = getNextToken(inputStream);
+			if (currentToken.type != Token::TokenType::COLON)
+			{
+				throw std::runtime_error("No colon between key and value of object member!");
+			}
+
+			currentToken = getNextToken(inputStream);
+
+			JsonNode* value = parseToken(currentToken, inputStream);
+
+			result->addMember(key, value);
+
+			currentToken = getNextToken(inputStream);
+			if (currentToken.type == Token::TokenType::COMMA)
+			{
+				currentToken = getNextToken(inputStream);
+				if (currentToken.type == Token::TokenType::OBJECT_END)
+				{
+					throw std::runtime_error("Incorrect formatting of Json Object! Comman followed by end of object!");
+				}
+			}
+			else if (currentToken.type != Token::TokenType::OBJECT_END)
+			{
+				throw std::runtime_error("Incorrect formatting of Json Object! No comma between two members!");
 			}
 		}
-		else if (currentToken.type != Token::TokenType::OBJECT_END)
-		{
-			throw std::runtime_error("Incorrect formatting of Json Object! No comma between two members!");
-		}
+	}
+	catch (const std::runtime_error& re)
+	{
+		delete result;
+		throw;
 	}
 
 	return result;
@@ -309,28 +331,42 @@ JsonArray* JsonParser::parseArray(std::istream& inputStream)
 {
 	JsonArray* result = new JsonArray();
 
-	Token currentToken = getNextToken(inputStream);
-
-	while (currentToken.type != Token::TokenType::ARRAY_END)
+	try
 	{
-		result->addElement(parseToken(currentToken, inputStream));
+		Token currentToken = getNextToken(inputStream);
 
-		currentToken = getNextToken(inputStream);
-		if (currentToken.type == Token::TokenType::COMMA)
+		while (currentToken.type != Token::TokenType::ARRAY_END)
 		{
+			result->addElement(parseToken(currentToken, inputStream));
+
 			currentToken = getNextToken(inputStream);
-			if (currentToken.type == Token::TokenType::ARRAY_END)
+			if (currentToken.type == Token::TokenType::COMMA)
 			{
-				throw std::runtime_error("Incorrect formatting of Json Array! Comman followed by end of array!");
+				currentToken = getNextToken(inputStream);
+				if (currentToken.type == Token::TokenType::ARRAY_END)
+				{
+					throw std::runtime_error("Incorrect formatting of Json Array! Comman followed by end of array!");
+				}
+			}
+			else if (currentToken.type != Token::TokenType::ARRAY_END)
+			{
+				throw std::runtime_error("Incorrect formatting of Json Array! No comma between two elements!");
 			}
 		}
-		else if (currentToken.type != Token::TokenType::ARRAY_END)
-		{
-			throw std::runtime_error("Incorrect formatting of Json Array! No comma between two elements!");
-		}
+	}
+	catch (const std::runtime_error& re)
+	{
+		delete result;
+		throw;
 	}
 
 	return result;
+}
+
+JsonParser& JsonParser::getInstance()
+{
+	static JsonParser parser;
+	return parser;
 }
 
 JsonNode* JsonParser::parseToken(const JsonParser::Token& currentToken, std::istream& inputStream)
@@ -358,14 +394,32 @@ JsonNode* JsonParser::parseToken(const JsonParser::Token& currentToken, std::ist
 
 JsonDataModel JsonParser::read(std::istream& inputStream)
 {
-	Token firstToken = getNextToken(inputStream);
+	linesCounter = 1;
 
-	JsonNode* root = parseToken(firstToken, inputStream);
-
-	return JsonDataModel(root);
+	try
+	{
+		Token firstToken = getNextToken(inputStream);
+		JsonNode* root = parseToken(firstToken, inputStream);
+		return JsonDataModel(root);
+	}
+	catch (const std::runtime_error& rte)
+	{
+		MyString newErrorText = getNewErrorText(rte.what());
+		throw std::runtime_error(newErrorText.c_str());
+	}
+	catch (const std::logic_error& le)
+	{
+		MyString newErrorText = getNewErrorText(le.what());
+		throw std::logic_error(newErrorText.c_str());
+	}
+	catch (const std::exception& e)
+	{
+		MyString newErrorText = getNewErrorText(e.what());
+		throw std::exception(newErrorText.c_str());
+	}
 }
 
-void JsonParser::write(std::ostream& outputStream, JsonDataModel model)
+void JsonParser::write(std::ostream& outputStream, JsonNode* nodeToWrite)
 {
-	model.write(outputStream);
+	nodeToWrite->writeFormatted(outputStream);
 }

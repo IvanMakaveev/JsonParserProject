@@ -5,10 +5,11 @@
 class ApplicationCommandExecutor
 {
 	JsonDataModel model;
-	void printHelp() const;
 
 public:
 	ApplicationCommandExecutor();
-	void runCommand(JsonCommand* command);
+	void printHelp() const;
+	void printLineSeparator() const;
+	bool runCommand(JsonCommand* command);
 };
 

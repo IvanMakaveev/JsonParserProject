@@ -19,6 +19,8 @@ class JsonParser
 	static const char NULL_PREFIX = 'n';
 	static const char NEGATIVE_NUMBER = '-';
 
+	mutable unsigned int linesCounter = 0;
+
 	struct Token
 	{
 		enum class TokenType
@@ -40,6 +42,12 @@ class JsonParser
 		TokenType type;
 	};
 
+	JsonParser() = default;
+	JsonParser(const JsonParser&) = delete;
+	JsonParser& operator=(const JsonParser&) = delete;
+
+	MyString getNewErrorText(const MyString& oldErrorText) const;
+
 	char getNextChar(std::istream& inputStream);
 
 	Token createStringToken(std::istream& inputStream);
@@ -53,7 +61,8 @@ class JsonParser
 	JsonObject* parseObject(std::istream& inputStream);
 	JsonArray* parseArray(std::istream& inputStream);
 public:
-	JsonDataModel read(std::istream& inputStream);
+	static JsonParser& getInstance();
 
-	void write(std::ostream& outputStream, JsonDataModel model);
+	JsonDataModel read(std::istream& inputStream);
+	void write(std::ostream& outputStream, JsonNode* model);
 };

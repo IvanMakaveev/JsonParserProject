@@ -6,24 +6,24 @@
 
 int main()
 {
-	std::ifstream ifs("read.json");
-
-	JsonDataModel model = JsonParser().read(ifs);
-	model.print();
-	ifs.close();
-
 	ApplicationCommandExecutor app;
 
-	while (false)
+	while (true)
 	{
 		try
 		{
-			app.runCommand(JsonConsoleCommandFactory::getInstance().getCommand());
+			bool exit = app.runCommand(JsonConsoleCommandFactory::getInstance().getCommand());
+			if (exit)
+			{
+				return 0;
+			}
 		}
 		catch (const std::exception& exc)
 		{
+			app.printLineSeparator();
 			std::cout << "An error has occured!!!" << std::endl;
 			std::cout << exc.what() << std::endl;
+			app.printLineSeparator();
 		}
 	}
 }

@@ -1,0 +1,15 @@
+{
+	"TestMember1": {
+		},
+	"TestText": "Hello",
+	"TestBool": true,
+	"TestBool2": false,
+	"TestNull": null,
+	"TestArray": [
+			"hello",
+			"welcome",
+			"lol"
+		],
+	"TestObject": {
+		}
+}

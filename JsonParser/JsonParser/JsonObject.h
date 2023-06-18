@@ -1,19 +1,22 @@
 #pragma once
 #include "MyString.h"
 #include "JsonCollection.h"
-#include "HelperFunctions.h"
 
+// JSON Object value node - container of JSON Key-Value pairs
 class JsonObject : public JsonCollection
 {
+	// Key-Value pair nested class used inside of the JsonObject
 	class ObjectValue
 	{
 		MyString key;
 		JsonNode* value;
 
+		// Big 6 functionallity
 		void free();
 		void copyFrom(const ObjectValue& other);
 		void moveFrom(ObjectValue&& other);
 	public:
+		// Big 6 interface
 		ObjectValue();
 		ObjectValue(const MyString& key, JsonNode* value);
 		ObjectValue(const ObjectValue& other);
@@ -22,7 +25,10 @@ class JsonObject : public JsonCollection
 		ObjectValue& operator=(ObjectValue&& other);
 		~ObjectValue();
 
+		// Writing to stream
 		void write(std::ostream& os, unsigned int nestingDepth) const;
+
+		// Getters
 		const MyString& getKey() const;
 		JsonNode* getValue();
 	};
@@ -31,23 +37,17 @@ class JsonObject : public JsonCollection
 	size_t capacity;
 	size_t count;
 
+	// Big 6 functionallity
 	void free();
 	void copyFrom(const JsonObject& other);
 	void moveFrom(JsonObject&& other);
-	void resize(size_t newCapacity);
-	int getMemberIndex(const MyString& elementKey) const
-	{
-		for (int i = 0; i < count; i++)
-		{
-			if (values[i].getKey() == elementKey)
-			{
-				return i;
-			}
-		}
 
-		return -1;
-	}
+	// Private functionallity for working with the collection
+	void resize(size_t newCapacity);
+	int getMemberIndex(const MyString& elementKey) const;
+
 public:
+	// Big 6 interface
 	JsonObject();
 	JsonObject(const JsonObject& other);
 	JsonObject(JsonObject&& other);
@@ -55,65 +55,19 @@ public:
 	JsonObject& operator=(JsonObject&& other);
 	~JsonObject();
 
+	// Function overrides from base class JsonNode - printing and searching
 	void writeNested(std::ostream& os, unsigned int nestingDepth) const override;
+	void search(const MyString& key, Vector<const JsonNode*>& result) const override;
+	
+	// Adding member to the object
 	void addMember(const MyString& key, JsonNode* value);
 
-	void search(const MyString& key, Vector<const JsonNode*>& result) const override
-	{
-		for (size_t i = 0; i < count; i++)
-		{
-			if (values[i].getKey() == key)
-			{
-				result.pushBack(values[i].getValue());
-			}
+	// Function overrides from class JsonCollection - collection operations
+	void deleteElement(const MyString& elementKey) override;
+	void setElement(const MyString& elementKey, JsonNode* nodeToSet) override;
+	JsonNode* getChildElement(const MyString& elementKey) override;
 
-			values[i].getValue()->search(key, result);
-		}
-	}
-
-	void deleteElement(const MyString& elementKey) override
-	{
-		int memberIndex = getMemberIndex(elementKey);
-		if (memberIndex == -1)
-		{
-			throw std::invalid_argument("Cannot delete member of invalid member key!");
-		}
-
-		count--;
-		for (size_t i = memberIndex; i < count; i++)
-		{
-			values[i] = values[i + 1];
-		}
-	}
-
-	void setElement(const MyString& elementKey, JsonNode* nodeToSet) override
-	{
-		if (nodeToSet == nullptr)
-		{
-			throw std::invalid_argument("Cannot set a node to nullptr/missing value!");
-		}
-
-		int memberIndex = getMemberIndex(elementKey);
-		if (memberIndex == -1)
-		{
-			throw std::invalid_argument("Cannot delete member with invalid member key!");
-		}
-
-		values[memberIndex] = std::move(ObjectValue(elementKey, nodeToSet));
-	}
-
-	JsonNode* getChildElement(const MyString& elementKey) override
-	{
-		int memberIndex = getMemberIndex(elementKey);
-
-		if (memberIndex == -1)
-		{
-			throw std::invalid_argument("Incorrect object member key! Cannot follow the given path!");
-		}
-
-		return values[memberIndex].getValue();
-	}
-
+	// Cloning
 	JsonNode* clone() const override;
 };
 

@@ -14,7 +14,14 @@ void SearchCommand::execute(JsonDataModel& model)
 	std::cout << "[" << std::endl;
 	for (size_t i = 0; i < elements; i++)
 	{
-		searchResults[i]->writeFormatted(std::cout);
+		searchResults[i]->writeNested(std::cout, 1);
+
+		if (i + 1 != elements)
+		{
+			std::cout << ',';
+		}
+
+		std::cout << std::endl;
 	}
 	std::cout << "]" << std::endl;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "JsonCommand.h"
 
+// Command for writing JSON Data to file
 class SaveToFileCommand : public JsonCommand
 {
 	MyString filePath;

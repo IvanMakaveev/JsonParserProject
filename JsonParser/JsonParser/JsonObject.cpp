@@ -1,4 +1,9 @@
 #include "JsonObject.h"
+#include "HelperFunctions.h"
+
+/*
+	Big 6 functionallity
+*/
 
 void JsonObject::free()
 {
@@ -27,6 +32,10 @@ void JsonObject::moveFrom(JsonObject&& other)
 	other.capacity = other.count = 0;
 }
 
+/*
+	Resizing
+*/
+
 void JsonObject::resize(size_t newCapacity)
 {
 	if (newCapacity < count)
@@ -45,6 +54,27 @@ void JsonObject::resize(size_t newCapacity)
 	delete[] values;
 	values = newValues;
 }
+
+/*
+	Parsing a given key to element id
+*/
+
+int JsonObject::getMemberIndex(const MyString& elementKey) const
+{
+	for (int i = 0; i < count; i++)
+	{
+		if (values[i].getKey() == elementKey)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+/*
+	Big 6 interface
+*/
 
 JsonObject::JsonObject()
 	: JsonCollection(JsonNode::JsonNodeType::ObjectNode), capacity(8), count(0)
@@ -91,6 +121,10 @@ JsonObject::~JsonObject()
 	free();
 }
 
+/*
+	Writing to stream
+*/
+
 void JsonObject::writeNested(std::ostream& os, unsigned int nestingDepth) const
 {
 	static const char OPENING_BRACKET = '{';
@@ -116,6 +150,27 @@ void JsonObject::writeNested(std::ostream& os, unsigned int nestingDepth) const
 	os << CLOSING_BRACKET;
 }
 
+/*
+	Searching recursively
+*/
+
+void JsonObject::search(const MyString& key, Vector<const JsonNode*>& result) const
+{
+	for (size_t i = 0; i < count; i++)
+	{
+		if (values[i].getKey() == key)
+		{
+			result.pushBack(values[i].getValue());
+		}
+
+		values[i].getValue()->search(key, result);
+	}
+}
+
+/*
+	Object member manipulation
+*/
+
 void JsonObject::addMember(const MyString& key, JsonNode* value)
 {
 	if (count == capacity)
@@ -123,13 +178,69 @@ void JsonObject::addMember(const MyString& key, JsonNode* value)
 		resize(capacity * 2);
 	}
 
+	if (getMemberIndex(key) != -1)
+	{
+		throw std::runtime_error("Cannot create member with the same key!");
+	}
+
 	values[count++] = ObjectValue(key, value);
 }
+
+void JsonObject::deleteElement(const MyString& elementKey)
+{
+	int memberIndex = getMemberIndex(elementKey);
+	if (memberIndex == -1)
+	{
+		throw std::invalid_argument("Cannot delete member of invalid member key!");
+	}
+
+	count--;
+	for (size_t i = memberIndex; i < count; i++)
+	{
+		values[i] = values[i + 1];
+	}
+}
+
+void JsonObject::setElement(const MyString& elementKey, JsonNode* nodeToSet)
+{
+	if (nodeToSet == nullptr)
+	{
+		throw std::invalid_argument("Cannot set a node to nullptr/missing value!");
+	}
+
+	int memberIndex = getMemberIndex(elementKey);
+	if (memberIndex == -1)
+	{
+		throw std::invalid_argument("Cannot delete member with invalid member key!");
+	}
+
+	values[memberIndex] = std::move(ObjectValue(elementKey, nodeToSet));
+}
+
+JsonNode* JsonObject::getChildElement(const MyString& elementKey)
+{
+	int memberIndex = getMemberIndex(elementKey);
+
+	if (memberIndex == -1)
+	{
+		throw std::invalid_argument("Incorrect object member key! Cannot follow the given path!");
+	}
+
+	return values[memberIndex].getValue();
+}
+
+/*
+	Cloning
+*/
 
 JsonNode* JsonObject::clone() const
 {
 	return new JsonObject(*this);
 }
+
+/*
+	Functions for the nested class - ObjectValue
+*/
 
 void JsonObject::ObjectValue::free()
 {

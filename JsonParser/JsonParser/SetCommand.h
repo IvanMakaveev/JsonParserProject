@@ -1,6 +1,7 @@
 #pragma once
 #include "JsonCommand.h"
 
+// Command for setting a json node at path
 class SetCommand : public JsonCommand
 {
 	MyString path;

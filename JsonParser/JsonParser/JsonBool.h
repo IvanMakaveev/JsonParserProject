@@ -1,6 +1,7 @@
 #pragma once
 #include "JsonNode.h"
 
+// JSON Bool value node
 class JsonBool : public JsonNode
 {
 	bool value;

@@ -1,6 +1,8 @@
 #include "JsonConsoleCommandFactory.h"
+
 #include <iostream>
 #include <sstream>
+
 #include "PrintCommand.h"
 #include "SearchCommand.h"
 #include "DeleteCommand.h"
@@ -8,7 +10,11 @@
 #include "CreateCommand.h"
 #include "SaveToFileCommand.h"
 #include "ReadFromFileCommand.h"
+#include "ExitCommand.h"
 
+/*
+	Command string stream manipulation
+*/
 
 MyString JsonConsoleCommandFactory::getCommandToken(std::stringstream& commandStream) const
 {
@@ -29,9 +35,14 @@ MyString JsonConsoleCommandFactory::getPathToken(std::stringstream& commandStrea
 	char separator = '\0';
 	commandStream >> separator;
 
+	if (!separator)
+	{
+		return MyString();
+	}
+
 	if (separator != STRING_SEPARATOR)
 	{
-		std::cout << "Invalid command parameters! Please pass path strings with quotation marks ( \" )!";
+		throw std::invalid_argument("Invalid command parameters! Please pass path strings with quotation marks ( \" )!");
 	}
 
 	commandStream.getline(buffer, BUFFER_SIZE, STRING_SEPARATOR);
@@ -49,7 +60,7 @@ MyString JsonConsoleCommandFactory::getJsonDataToken(std::stringstream& commandS
 
 	if (separator != STRING_SEPARATOR)
 	{
-		std::cout << "Invalid command parameters! Please pass json strings with leading quotation marks ( \" )!";
+		throw std::invalid_argument("Invalid command parameters! Please pass json strings with leading quotation marks ( \" )!");
 	}
 
 	commandStream.getline(buffer, BUFFER_SIZE);
@@ -57,12 +68,16 @@ MyString JsonConsoleCommandFactory::getJsonDataToken(std::stringstream& commandS
 
 	if (result[result.length() - 1] != STRING_SEPARATOR)
 	{
-		std::cout << "Invalid command parameters! Please pass json strings with trailing quotation marks ( \" )!";
+		throw std::invalid_argument("Invalid command parameters! Please pass json strings with trailing quotation marks ( \" )!");
 	}
 
 	result[result.length() - 1] = '\0';
 	return result;
 }
+
+/*
+	Command factory method
+*/
 
 JsonCommand* JsonConsoleCommandFactory::getCommand() const
 {
@@ -114,20 +129,27 @@ JsonCommand* JsonConsoleCommandFactory::getCommand() const
 	if (command == "save")
 	{
 		MyString jsonPath = getPathToken(commandStream);
-
 		return new SaveToFileCommand(previousPath, jsonPath);
 	}
 
 	if (command == "saveas")
 	{
 		MyString filePath = getPathToken(commandStream);
-		MyString jsonPath = getPathToken(commandStream);
-
+		MyString jsonPath  = getPathToken(commandStream);
 		return new SaveToFileCommand(filePath, jsonPath);
+	}
+
+	if (command == "exit")
+	{
+		return new ExitCommand();
 	}
 
 	return nullptr;
 }
+
+/*
+	Instance singleton getter
+*/
 
 JsonConsoleCommandFactory& JsonConsoleCommandFactory::getInstance()
 {

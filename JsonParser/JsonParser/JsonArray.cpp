@@ -1,5 +1,10 @@
 #include "JsonArray.h"
 #include <stdexcept>
+#include "HelperFunctions.h"
+
+/*
+	Big 6 functionallity
+*/
 
 void JsonArray::free()
 {
@@ -33,6 +38,10 @@ void JsonArray::moveFrom(JsonArray&& other)
 	other.count = other.capacity = 0;
 }
 
+/*
+	Resizing
+*/
+
 void JsonArray::resize(size_t newCapacity)
 {
 	if (newCapacity < count)
@@ -52,6 +61,10 @@ void JsonArray::resize(size_t newCapacity)
 	values = newNodes;
 }
 
+/*
+	Parsing a given key to element id
+*/
+
 unsigned int JsonArray::getElementId(const MyString& key) const
 {
 	if (key.length() != 1 || !isDigit(key[0]))
@@ -61,6 +74,10 @@ unsigned int JsonArray::getElementId(const MyString& key) const
 
 	return toNumber(key[0]);
 }
+
+/*
+	Big 6 interface
+*/
 
 JsonArray::JsonArray() 
 	: JsonCollection(JsonNode::JsonNodeType::ArrayNode), capacity(8), count(0)
@@ -107,6 +124,10 @@ JsonArray::~JsonArray()
 	free();
 }
 
+/*
+	Writing to stream
+*/
+
 void JsonArray::writeNested(std::ostream& os, unsigned int nestingDepth) const
 {
 	static const char OPENING_BRACKET = '[';
@@ -132,6 +153,22 @@ void JsonArray::writeNested(std::ostream& os, unsigned int nestingDepth) const
 	os << CLOSING_BRACKET;
 }
 
+/*
+	Searching recursively
+*/
+
+void JsonArray::search(const MyString& key, Vector<const JsonNode*>& result) const
+{
+	for (size_t i = 0; i < count; i++)
+	{
+		values[i]->search(key, result);
+	}
+}
+
+/*
+	Array element manipulation
+*/
+
 void JsonArray::addElement(JsonNode* nodeToAdd)
 {
 	if (count == capacity)
@@ -141,6 +178,55 @@ void JsonArray::addElement(JsonNode* nodeToAdd)
 
 	values[count++] = nodeToAdd;
 }
+
+void JsonArray::deleteElement(const MyString& elementKey)
+{
+	size_t elementToRemove = getElementId(elementKey);
+
+	if (elementToRemove >= count)
+	{
+		throw std::invalid_argument("Cannot delete an element with invalid array ID!");
+	}
+
+	delete values[elementToRemove];
+	count--;
+	for (size_t i = elementToRemove; i < count; i++)
+	{
+		values[i] = values[i + 1];
+	}
+}
+
+void JsonArray::setElement(const MyString& elementKey, JsonNode* nodeToSet)
+{
+	if (nodeToSet == nullptr)
+	{
+		throw std::invalid_argument("Cannot set a node to nullptr");
+	}
+
+	size_t targetElement = getElementId(elementKey);
+	if (targetElement >= count)
+	{
+		throw std::invalid_argument("Cannot set the value of an invalid array ID!");
+	}
+
+	delete values[targetElement];
+	values[targetElement] = nodeToSet;
+}
+
+JsonNode* JsonArray::getChildElement(const MyString& elementKey)
+{
+	size_t targetElement = getElementId(elementKey);
+	if (targetElement >= count)
+	{
+		throw std::invalid_argument("Cannot get the value of an invalid array ID!");
+	}
+
+	return values[targetElement];
+}
+
+/*
+	Cloning
+*/
 
 JsonNode* JsonArray::clone() const
 {

@@ -1,6 +1,7 @@
 #pragma once
 #include "JsonNode.h"
 
+// JSON Number value node
 class JsonNumber : public JsonNode
 {
 	double value;

@@ -1,9 +1,9 @@
 #pragma once
 #include "JsonNode.h"
 
+// JSON Null value node
 class JsonNull : public JsonNode
 {
-
 public:
 	JsonNull();
 

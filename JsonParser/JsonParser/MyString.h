@@ -1,5 +1,7 @@
 #include <iostream>
 #pragma once
+
+// A string implementation made during the lectures/homeworks
 class MyString
 {
 	static const short SSO_MAX_SIZE = sizeof(char*) + sizeof(size_t) - 1;
