@@ -1,7 +1,6 @@
 #include "JsonDataModel.h"
 
-#include "JsonArray.h"
-#include "JsonObject.h"
+#include "JsonCollection.h"
 #include "HelperFunctions.h"
 
 /*
@@ -203,6 +202,13 @@ void JsonDataModel::set(const MyString& path, JsonNode* nodeToSet)
 		throw std::invalid_argument("Cannot set members to nullptr node!");
 	}
 
+	if (isRootPath(path))
+	{
+		delete value;
+		value = nodeToSet;
+		return;
+	}
+
 	std::stringstream pathStream(path.c_str());
 	JsonNode* targetNode = getTarget(pathStream);
 	MyString elementId = getNextPathElement(pathStream);
@@ -237,6 +243,16 @@ void JsonDataModel::create(const MyString& path, JsonNode* nodeToAdd)
 		throw std::runtime_error("Cannot create members of uninitialized Json Data Model!");
 	}
 
+	if (nodeToAdd == nullptr)
+	{
+		throw std::invalid_argument("Cannot create members with nullptr node!");
+	}
+
+	if (isRootPath(path))
+	{
+		throw std::invalid_argument("Cannot create empty members in root node!");
+	}
+
 	std::stringstream pathStream(path.c_str());
 	JsonNode* targetNode = getTarget(pathStream);
 	MyString newId = getNextPathElement(pathStream);
@@ -246,18 +262,7 @@ void JsonDataModel::create(const MyString& path, JsonNode* nodeToAdd)
 		throw std::runtime_error("Cannot create members of non-container Json Nodes!");
 	}
 
-	if (targetNode->getType() == JsonNode::JsonNodeType::ObjectNode)
-	{
-		static_cast<JsonObject*>(targetNode)->addElement(newId, nodeToAdd);
-	}
-	else if (targetNode->getType() == JsonNode::JsonNodeType::ArrayNode)
-	{
-		static_cast<JsonArray*>(targetNode)->addElement(nodeToAdd);
-	}
-	else
-	{
-		throw std::logic_error("Unknown collection type recieved!");
-	}
+	static_cast<JsonCollection*>(targetNode)->addElement(newId, nodeToAdd);
 }
 
 /*

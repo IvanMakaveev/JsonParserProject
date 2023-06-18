@@ -1,0 +1,70 @@
+{
+	"company data": {
+			"name": "My Company BG."
+		},
+	"staff count": 128,
+	"average salary": 1400,
+	"list of workgroups": [
+			{
+				"name": "Group CEO",
+				"members": [
+						{
+							"name": "John Tombson",
+							"age": 27,
+							"isManager": true
+						},
+						{
+							"name": "Katy Miller",
+							"age": 21,
+							"isManager": false
+						},
+						{
+							"name": "George Peterson",
+							"age": 22,
+							"isManager": false
+						},
+						{
+							"name": "Ivan Moody",
+							"age": 43,
+							"isManager": true
+						},
+						{
+							"name": "Derrek Goth",
+							"age": 26,
+							"isManager": false
+						},
+						{
+							"name": "Lars Kobek",
+							"age": 24,
+							"isManager": false
+						},
+						{
+							"name": "Tina Johnes",
+							"age": 25,
+							"isManager": false
+						}
+					]
+			},
+			{
+				"name": "Group 2",
+				"members": [
+					]
+			},
+			{
+				"name": "Group 3",
+				"members": [
+						{
+							"name": "Timmy T.",
+							"age": 25,
+							"isManager": true
+						},
+						{
+							"name": "Johnny D.",
+							"age": 22,
+							"isManager": false
+						}
+					]
+			}
+		],
+	"company location": "Bulgaria"
+}

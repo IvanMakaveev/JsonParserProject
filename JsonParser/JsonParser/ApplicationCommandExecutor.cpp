@@ -26,6 +26,8 @@ ApplicationCommandExecutor::ApplicationCommandExecutor()
 {
 	std::cout << "Hello user!" << std::endl;
 	std::cout << "This is a JSON Parsing system. You can start by loading a JSON file." << std::endl;
+	std::cout << "I have provided you with a sample file called: \"sample.json\"" << std::endl;
+	std::cout << "Feel free to use it during testing!" << std::endl;
 	std::cout << "Here is a lost of all the commands:" << std::endl;
 	printHelp();
 }
@@ -54,7 +56,16 @@ bool ApplicationCommandExecutor::runCommand(JsonCommand* command)
 	}
 	else
 	{
-		command->execute(model);
+		try
+		{
+			command->execute(model);
+		}
+		catch (const std::exception&)
+		{
+			delete command;
+			throw;
+		}
+
 		printLineSeparator();
 		std::cout << "Command execution complete!" << std::endl;
 		printLineSeparator();
