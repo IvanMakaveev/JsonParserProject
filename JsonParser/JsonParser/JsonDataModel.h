@@ -52,11 +52,11 @@ public:
 	// Deleting node
 	void deleteAt(const MyString& path);
 
+	// Moving a node
+	void move(const MyString& fromPath, const MyString& toPath);
+
 	// Retrieving a node
 	JsonNode* getElementAt(const MyString& path);
-
-	// Moving a node
-	void move(const MyString& from, const MyString& to);
 
 	// Writing to file
 	void write(std::ostream& os) const;

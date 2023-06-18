@@ -224,6 +224,24 @@ JsonNode* JsonArray::getChildElement(const MyString& elementKey)
 	return values[targetElement];
 }
 
+void JsonArray::moveElementsTo(JsonCollection* otherCollection)
+{
+	for (size_t i = 0; i < count; i++)
+	{
+		otherCollection->addElement(toString(i), values[i]);
+	}
+
+	count = 0;
+	capacity = 8;
+	delete[] values;
+	values = new JsonNode * [capacity];
+}
+
+void JsonArray::addElement(const MyString& elementKey, JsonNode* nodeToAdd)
+{
+	addElement(nodeToAdd);
+}
+
 /*
 	Cloning
 */

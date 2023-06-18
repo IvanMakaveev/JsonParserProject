@@ -248,7 +248,7 @@ void JsonDataModel::create(const MyString& path, JsonNode* nodeToAdd)
 
 	if (targetNode->getType() == JsonNode::JsonNodeType::ObjectNode)
 	{
-		static_cast<JsonObject*>(targetNode)->addMember(newId, nodeToAdd);
+		static_cast<JsonObject*>(targetNode)->addElement(newId, nodeToAdd);
 	}
 	else if (targetNode->getType() == JsonNode::JsonNodeType::ArrayNode)
 	{
@@ -286,6 +286,39 @@ void JsonDataModel::deleteAt(const MyString& path)
 	}
 
 	static_cast<JsonCollection*>(targetNode)->deleteElement(elementId);
+}
+
+/*
+	Moving node
+*/
+
+void JsonDataModel::move(const MyString& fromPath, const MyString& toPath)
+{
+	if (!hasInstance())
+	{
+		throw std::runtime_error("Cannot move members of uninitialized Json Data Model!");
+	}
+
+	if (isRootPath(fromPath))
+	{
+		throw std::invalid_argument("Cannot move from the root Json Data Model!");
+	}
+
+	JsonNode* destNode = getElementAt(toPath);
+
+	if (!isCollectionNode(destNode))
+	{
+		throw std::runtime_error("The destination node must be a collection!");
+	}
+
+	JsonNode* srcNode = getElementAt(fromPath);
+
+	if (!isCollectionNode(srcNode))
+	{
+		throw std::runtime_error("The source node must be a collection!");
+	}
+
+	static_cast<JsonCollection*>(srcNode)->moveElementsTo(static_cast<JsonCollection*>(destNode));
 }
 
 /*

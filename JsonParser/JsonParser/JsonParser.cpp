@@ -6,47 +6,9 @@
 #include "HelperFunctions.h"
 #include <sstream>
 
-static double convertToNumber(const MyString& text)
-{
-	static const char NEGATIVE_SIGN = '-';
-	static const char DECIMAL_SIGN = '.';
-	double result = 0;
-	bool isNegative = false;
-
-	if (text[0] == NEGATIVE_SIGN)
-	{
-		isNegative = true;
-	}
-	else
-	{
-		result += toNumber(text[0]);
-	}
-
-	size_t textLen = text.length();
-	bool isReadingDecimal = false;
-	double decimalDivisor = 1;
-	for (size_t i = 1; i < textLen; i++)
-	{
-		if (!isReadingDecimal)
-		{
-			if (text[i] == DECIMAL_SIGN)
-			{
-				isReadingDecimal = true;
-				continue;
-			}
-
-			result *= 10;
-			result += toNumber(text[i]);
-		}
-		else
-		{
-			decimalDivisor *= 10;
-			result += (toNumber(text[i]) / decimalDivisor);
-		}
-	}
-
-	return isNegative ? -result : result;
-}
+/*
+	Function to add the line counter to the error message
+*/
 
 MyString JsonParser::getNewErrorText(const MyString& oldErrorText) const
 {
@@ -56,6 +18,10 @@ MyString JsonParser::getNewErrorText(const MyString& oldErrorText) const
 
 	return result;
 }
+
+/*
+	Retrieving next non-whitespace caracter
+*/
 
 char JsonParser::getNextChar(std::istream& inputStream)
 {
@@ -92,6 +58,10 @@ char JsonParser::getNextChar(std::istream& inputStream)
 
 	} while (true);
 }
+
+/*
+	Token creation and validation
+*/
 
 JsonParser::Token JsonParser::createStringToken(std::istream& inputStream)
 {
@@ -218,6 +188,10 @@ JsonParser::Token JsonParser::createNumberToken(std::istream& inputStream, char 
 	return result;
 }
 
+/*
+	Token retrieval function
+*/
+
 JsonParser::Token JsonParser::getNextToken(std::istream& inputStream)
 {
 	char current = getNextChar(inputStream);
@@ -274,6 +248,10 @@ JsonParser::Token JsonParser::getNextToken(std::istream& inputStream)
 	throw std::runtime_error("Symbol not matching any expected literal! Perhaps there is a missing format token!");
 }
 
+/*
+	Json Object parsing
+*/
+
 JsonObject* JsonParser::parseObject(std::istream& inputStream)
 {
 	JsonObject* result = new JsonObject();
@@ -301,7 +279,7 @@ JsonObject* JsonParser::parseObject(std::istream& inputStream)
 
 			JsonNode* value = parseToken(currentToken, inputStream);
 
-			result->addMember(key, value);
+			result->addElement(key, value);
 
 			currentToken = getNextToken(inputStream);
 			if (currentToken.type == Token::TokenType::COMMA)
@@ -326,6 +304,10 @@ JsonObject* JsonParser::parseObject(std::istream& inputStream)
 
 	return result;
 }
+
+/*
+	Json Array parsing
+*/
 
 JsonArray* JsonParser::parseArray(std::istream& inputStream)
 {
@@ -363,11 +345,9 @@ JsonArray* JsonParser::parseArray(std::istream& inputStream)
 	return result;
 }
 
-JsonParser& JsonParser::getInstance()
-{
-	static JsonParser parser;
-	return parser;
-}
+/*
+	Token parser
+*/
 
 JsonNode* JsonParser::parseToken(const JsonParser::Token& currentToken, std::istream& inputStream)
 {
@@ -391,6 +371,20 @@ JsonNode* JsonParser::parseToken(const JsonParser::Token& currentToken, std::ist
 		throw std::runtime_error("Unexpected sequence of tokens!");
 	}
 }
+
+/*
+	Singleton instance getter
+*/
+
+JsonParser& JsonParser::getInstance()
+{
+	static JsonParser parser;
+	return parser;
+}
+
+/*
+	Read from stream function
+*/
 
 JsonDataModel JsonParser::read(std::istream& inputStream)
 {
@@ -418,6 +412,10 @@ JsonDataModel JsonParser::read(std::istream& inputStream)
 		throw std::exception(newErrorText.c_str());
 	}
 }
+
+/*
+	Write to stream function - used recursively
+*/
 
 void JsonParser::write(std::ostream& outputStream, JsonNode* nodeToWrite)
 {

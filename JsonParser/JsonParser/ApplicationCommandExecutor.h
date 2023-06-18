@@ -2,6 +2,7 @@
 #include "JsonDataModel.h"
 #include "JsonCommand.h"
 
+// Class for running the working console environment
 class ApplicationCommandExecutor
 {
 	JsonDataModel model;

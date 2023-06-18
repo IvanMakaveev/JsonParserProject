@@ -31,6 +31,9 @@ class JsonObject : public JsonCollection
 		// Getters
 		const MyString& getKey() const;
 		JsonNode* getValue();
+
+		// Setter for null value - used for collection moving
+		void setNullValue();
 	};
 
 	ObjectValue* values;
@@ -60,12 +63,13 @@ public:
 	void search(const MyString& key, Vector<const JsonNode*>& result) const override;
 	
 	// Adding member to the object
-	void addMember(const MyString& key, JsonNode* value);
+	void addElement(const MyString& key, JsonNode* value) override;
 
 	// Function overrides from class JsonCollection - collection operations
 	void deleteElement(const MyString& elementKey) override;
 	void setElement(const MyString& elementKey, JsonNode* nodeToSet) override;
 	JsonNode* getChildElement(const MyString& elementKey) override;
+	void moveElementsTo(JsonCollection* otherCollection) override;
 
 	// Cloning
 	JsonNode* clone() const override;

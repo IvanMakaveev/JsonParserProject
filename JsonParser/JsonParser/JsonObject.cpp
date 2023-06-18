@@ -171,7 +171,7 @@ void JsonObject::search(const MyString& key, Vector<const JsonNode*>& result) co
 	Object member manipulation
 */
 
-void JsonObject::addMember(const MyString& key, JsonNode* value)
+void JsonObject::addElement(const MyString& key, JsonNode* value)
 {
 	if (count == capacity)
 	{
@@ -229,6 +229,20 @@ JsonNode* JsonObject::getChildElement(const MyString& elementKey)
 	return values[memberIndex].getValue();
 }
 
+void JsonObject::moveElementsTo(JsonCollection* otherCollection)
+{
+	for (size_t i = 0; i < count; i++)
+	{
+		otherCollection->addElement(values[i].getKey(), values[i].getValue());
+		values[i].setNullValue();
+	}
+
+	count = 0;
+	capacity = 8;
+	delete[] values;
+	values = new ObjectValue[capacity];
+}
+
 /*
 	Cloning
 */
@@ -258,7 +272,7 @@ void JsonObject::ObjectValue::moveFrom(ObjectValue&& other)
 	key = other.key;
 	value = other.value;
 
-	other.value = nullptr;
+	other.setNullValue();
 	other.key = "";
 }
 
@@ -325,4 +339,9 @@ const MyString& JsonObject::ObjectValue::getKey() const
 JsonNode* JsonObject::ObjectValue::getValue()
 {
 	return value;
+}
+
+void JsonObject::ObjectValue::setNullValue()
+{
+	value = nullptr;
 }

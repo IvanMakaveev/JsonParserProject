@@ -156,6 +156,7 @@
     <ClCompile Include="JsonObject.cpp" />
     <ClCompile Include="JsonParser.cpp" />
     <ClCompile Include="JsonString.cpp" />
+    <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="MyString.cpp" />
     <ClCompile Include="PrintCommand.cpp" />
     <ClCompile Include="ReadFromFileCommand.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="DeleteCommand.h" />
     <ClInclude Include="ExitCommand.h" />
     <ClInclude Include="JsonCollection.h" />
+    <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="ReadFromFileCommand.h" />
     <ClInclude Include="SaveToFileCommand.h" />
     <ClInclude Include="SetCommand.h" />

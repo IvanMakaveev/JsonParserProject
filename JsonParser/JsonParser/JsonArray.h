@@ -38,6 +38,8 @@ public:
 	void deleteElement(const MyString& elementKey) override;
 	void setElement(const MyString& elementKey, JsonNode* nodeToSet) override;
 	JsonNode* getChildElement(const MyString& elementKey) override;
+	void moveElementsTo(JsonCollection* otherCollection) override;
+	void addElement(const MyString& elementKey, JsonNode* nodeToAdd) override;
 
 	// Cloning
 	JsonNode* clone() const override;

@@ -8,6 +8,7 @@
 #include "DeleteCommand.h"
 #include "SetCommand.h"
 #include "CreateCommand.h"
+#include "MoveCommand.h"
 #include "SaveToFileCommand.h"
 #include "ReadFromFileCommand.h"
 #include "ExitCommand.h"
@@ -118,6 +119,13 @@ JsonCommand* JsonConsoleCommandFactory::getCommand() const
 	{
 		MyString path = getPathToken(commandStream);
 		return new DeleteCommand(path);
+	}
+
+	if (command == "move")
+	{
+		MyString fromPath = getPathToken(commandStream);
+		MyString toPath = getPathToken(commandStream);
+		return new MoveCommand(fromPath, toPath);
 	}
 
 	if (command == "load")

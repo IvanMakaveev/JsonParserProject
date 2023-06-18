@@ -9,15 +9,16 @@ void ApplicationCommandExecutor::printLineSeparator() const
 
 void ApplicationCommandExecutor::printHelp() const
 {
-	std::cout << "load \"file path\"" << std::endl;
-	std::cout << "print" << std::endl;
-	std::cout << "search \"keyword\"" << std::endl;
-	std::cout << "set \"model path\" \"jsonString\"" << std::endl;
-	std::cout << "create \"model path\" \"jsonString\"" << std::endl;
-	std::cout << "delete \"model path\"" << std::endl;
-	std::cout << "save [\"model path\"]" << std::endl;
-	std::cout << "saveas \"new file path\" [\"model path\"]" << std::endl;
-	std::cout << "exit" << std::endl;
+	std::cout << "-> load \"file path\"" << std::endl;
+	std::cout << "-> print" << std::endl;
+	std::cout << "-> search \"keyword\"" << std::endl;
+	std::cout << "-> set \"model path\" \"jsonString\"" << std::endl;
+	std::cout << "-> create \"model path\" \"jsonString\"" << std::endl;
+	std::cout << "-> delete \"model path\"" << std::endl;
+	std::cout << "-> move \"from model path\" \"to model path\"" << std::endl;
+	std::cout << "-> save [\"model path\"]" << std::endl;
+	std::cout << "-> saveas \"new file path\" [\"model path\"]" << std::endl;
+	std::cout << "-> exit" << std::endl;
 	printLineSeparator();
 }
 

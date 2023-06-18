@@ -5,6 +5,7 @@
 #include "JsonObject.h"
 #include "JsonArray.h"
 
+// A singleton class for parsing JSON data from and to a given stream
 class JsonParser
 {
 	static const char STRING_SEPARATOR = '"';
@@ -21,6 +22,7 @@ class JsonParser
 
 	mutable unsigned int linesCounter = 0;
 
+	// Nested structure for easier parsing of data
 	struct Token
 	{
 		enum class TokenType
@@ -42,14 +44,18 @@ class JsonParser
 		TokenType type;
 	};
 
+	// Singleton implementation
 	JsonParser() = default;
 	JsonParser(const JsonParser&) = delete;
 	JsonParser& operator=(const JsonParser&) = delete;
 
+	// Function for making errors more clear
 	MyString getNewErrorText(const MyString& oldErrorText) const;
 
+	// Function for getting next non-whitespace char
 	char getNextChar(std::istream& inputStream);
 
+	// Token creation functions
 	Token createStringToken(std::istream& inputStream);
 	Token createTrueToken(std::istream& inputStream);
 	Token createFalseToken(std::istream& inputStream);
@@ -57,12 +63,15 @@ class JsonParser
 	Token createNumberToken(std::istream& inputStream, char startingSymbol);
 	Token getNextToken(std::istream& inputStream);
 
+	// Functions for parsing Json Nodes
 	JsonNode* parseToken(const Token& current, std::istream& inputStream);
 	JsonObject* parseObject(std::istream& inputStream);
 	JsonArray* parseArray(std::istream& inputStream);
 public:
+	// Singleton instance getter
 	static JsonParser& getInstance();
 
+	// Parser functionallity interface
 	JsonDataModel read(std::istream& inputStream);
 	void write(std::ostream& outputStream, JsonNode* model);
 };

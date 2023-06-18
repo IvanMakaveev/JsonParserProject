@@ -17,3 +17,5 @@ unsigned int toNumber(char symbol);
 char toSymbol(unsigned int digit);
 
 MyString toString(unsigned int number);
+
+double convertToNumber(const MyString& text);
