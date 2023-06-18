@@ -142,6 +142,8 @@
     <ClCompile Include="HelperFunctions.cpp" />
     <ClCompile Include="JsonArray.cpp" />
     <ClCompile Include="JsonBool.cpp" />
+    <ClCompile Include="JsonCommand.cpp" />
+    <ClCompile Include="JsonConsoleCommandFactory.cpp" />
     <ClCompile Include="JsonDataModel.cpp" />
     <ClCompile Include="JsonNode.cpp" />
     <ClCompile Include="JsonNull.cpp" />
@@ -157,6 +159,8 @@
     <ClInclude Include="HelperFunctions.h" />
     <ClInclude Include="JsonArray.h" />
     <ClInclude Include="JsonBool.h" />
+    <ClInclude Include="JsonCommand.h" />
+    <ClInclude Include="JsonConsoleCommandFactory.h" />
     <ClInclude Include="JsonDataModel.h" />
     <ClInclude Include="JsonNode.h" />
     <ClInclude Include="JsonNull.h" />
