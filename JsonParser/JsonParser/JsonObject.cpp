@@ -197,7 +197,7 @@ void JsonObject::deleteElement(const MyString& elementKey)
 	count--;
 	for (size_t i = memberIndex; i < count; i++)
 	{
-		values[i] = values[i + 1];
+		values[i] = std::move(values[i + 1]);
 	}
 }
 
