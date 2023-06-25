@@ -183,7 +183,7 @@ void JsonObject::addElement(const MyString& key, JsonNode* value)
 		throw std::runtime_error("Cannot create member with the same key!");
 	}
 
-	values[count++] = ObjectValue(key, value);
+	values[count++] = std::move(ObjectValue(key, value));
 }
 
 void JsonObject::deleteElement(const MyString& elementKey)
