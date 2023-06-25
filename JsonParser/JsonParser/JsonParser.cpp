@@ -23,7 +23,7 @@ MyString JsonParser::getNewErrorText(const MyString& oldErrorText) const
 	Retrieving next non-whitespace caracter
 */
 
-char JsonParser::getNextChar(std::istream& inputStream)
+char JsonParser::getNextChar(std::istream& inputStream) const
 {
 	static const size_t WHITESPACE_COUNT = 3;
 	static const char WHITESPACE_CHARS[WHITESPACE_COUNT + 1] = "\n\t ";
@@ -63,7 +63,7 @@ char JsonParser::getNextChar(std::istream& inputStream)
 	Token creation and validation
 */
 
-JsonParser::Token JsonParser::createStringToken(std::istream& inputStream)
+JsonParser::Token JsonParser::createStringToken(std::istream& inputStream) const
 {
 	Token result;
 	result.type = Token::TokenType::STRING;
@@ -83,7 +83,7 @@ JsonParser::Token JsonParser::createStringToken(std::istream& inputStream)
 	return result;
 }
 
-JsonParser::Token JsonParser::createTrueToken(std::istream& inputStream)
+JsonParser::Token JsonParser::createTrueToken(std::istream& inputStream) const
 {
 	static const size_t WORD_LEN = 3;
 	static const char REMAINING_WORD[WORD_LEN + 1] = "rue";
@@ -109,7 +109,7 @@ JsonParser::Token JsonParser::createTrueToken(std::istream& inputStream)
 	return result;
 }
 
-JsonParser::Token JsonParser::createFalseToken(std::istream& inputStream)
+JsonParser::Token JsonParser::createFalseToken(std::istream& inputStream) const
 {
 	static const size_t WORD_LEN = 4;
 	static const char REMAINING_WORD[WORD_LEN + 1] = "alse";
@@ -135,7 +135,7 @@ JsonParser::Token JsonParser::createFalseToken(std::istream& inputStream)
 	return result;
 }
 
-JsonParser::Token JsonParser::createNullToken(std::istream& inputStream)
+JsonParser::Token JsonParser::createNullToken(std::istream& inputStream) const
 {
 	static const size_t WORD_LEN = 3;
 	static const char REMAINING_WORD[WORD_LEN + 1] = "ull";
@@ -160,7 +160,7 @@ JsonParser::Token JsonParser::createNullToken(std::istream& inputStream)
 	return result;
 }
 
-JsonParser::Token JsonParser::createNumberToken(std::istream& inputStream, char startingSymbol)
+JsonParser::Token JsonParser::createNumberToken(std::istream& inputStream, char startingSymbol) const
 {
 	static const char DECIMAL_SEPARATOR = '.';
 
@@ -192,7 +192,7 @@ JsonParser::Token JsonParser::createNumberToken(std::istream& inputStream, char 
 	Token retrieval function
 */
 
-JsonParser::Token JsonParser::getNextToken(std::istream& inputStream)
+JsonParser::Token JsonParser::getNextToken(std::istream& inputStream) const
 {
 	char current = getNextChar(inputStream);
 
@@ -252,7 +252,7 @@ JsonParser::Token JsonParser::getNextToken(std::istream& inputStream)
 	Json Object parsing
 */
 
-JsonObject* JsonParser::parseObject(std::istream& inputStream)
+JsonObject* JsonParser::parseObject(std::istream& inputStream) const
 {
 	JsonObject* result = new JsonObject();
 
@@ -309,7 +309,7 @@ JsonObject* JsonParser::parseObject(std::istream& inputStream)
 	Json Array parsing
 */
 
-JsonArray* JsonParser::parseArray(std::istream& inputStream)
+JsonArray* JsonParser::parseArray(std::istream& inputStream) const
 {
 	JsonArray* result = new JsonArray();
 
@@ -349,7 +349,7 @@ JsonArray* JsonParser::parseArray(std::istream& inputStream)
 	Token parser
 */
 
-JsonNode* JsonParser::parseToken(const JsonParser::Token& currentToken, std::istream& inputStream)
+JsonNode* JsonParser::parseToken(const JsonParser::Token& currentToken, std::istream& inputStream) const
 {
 	switch (currentToken.type)
 	{
@@ -386,7 +386,7 @@ JsonParser& JsonParser::getInstance()
 	Read from stream function
 */
 
-JsonDataModel JsonParser::read(std::istream& inputStream)
+JsonDataModel JsonParser::read(std::istream& inputStream) const
 {
 	linesCounter = 1;
 
@@ -417,7 +417,7 @@ JsonDataModel JsonParser::read(std::istream& inputStream)
 	Write to stream function - used recursively
 */
 
-void JsonParser::write(std::ostream& outputStream, JsonNode* nodeToWrite)
+void JsonParser::write(std::ostream& outputStream, JsonNode* nodeToWrite) const
 {
 	nodeToWrite->writeFormatted(outputStream);
 }

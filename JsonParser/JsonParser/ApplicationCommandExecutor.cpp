@@ -45,6 +45,7 @@ bool ApplicationCommandExecutor::runCommand(JsonCommand* command)
 
 	if (dynamic_cast<ExitCommand*>(command) != nullptr)
 	{
+		delete command;
 		return true;
 	}
 

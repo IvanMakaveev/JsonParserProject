@@ -84,3 +84,9 @@ move "list of workgroups/1/members" "list of workgroups/0/members"
 saveas "result.json"
     // should save the changes as "result.json"
 exit
+
+CHANGE LOG:
+* ApplicationExecutor
+- Deleted exit command
+* Json Parser
+- Made all functions constant

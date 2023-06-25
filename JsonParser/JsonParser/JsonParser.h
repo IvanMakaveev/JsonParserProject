@@ -53,25 +53,25 @@ class JsonParser
 	MyString getNewErrorText(const MyString& oldErrorText) const;
 
 	// Function for getting next non-whitespace char
-	char getNextChar(std::istream& inputStream);
+	char getNextChar(std::istream& inputStream) const;
 
 	// Token creation functions
-	Token createStringToken(std::istream& inputStream);
-	Token createTrueToken(std::istream& inputStream);
-	Token createFalseToken(std::istream& inputStream);
-	Token createNullToken(std::istream& inputStream);
-	Token createNumberToken(std::istream& inputStream, char startingSymbol);
-	Token getNextToken(std::istream& inputStream);
+	Token createStringToken(std::istream& inputStream) const;
+	Token createTrueToken(std::istream& inputStream) const;
+	Token createFalseToken(std::istream& inputStream) const;
+	Token createNullToken(std::istream& inputStream) const;
+	Token createNumberToken(std::istream& inputStream, char startingSymbol) const;
+	Token getNextToken(std::istream& inputStream) const;
 
 	// Functions for parsing Json Nodes
-	JsonNode* parseToken(const Token& current, std::istream& inputStream);
-	JsonObject* parseObject(std::istream& inputStream);
-	JsonArray* parseArray(std::istream& inputStream);
+	JsonNode* parseToken(const Token& current, std::istream& inputStream) const;
+	JsonObject* parseObject(std::istream& inputStream) const;
+	JsonArray* parseArray(std::istream& inputStream) const;
 public:
 	// Singleton instance getter
 	static JsonParser& getInstance();
 
 	// Parser functionallity interface
-	JsonDataModel read(std::istream& inputStream);
-	void write(std::ostream& outputStream, JsonNode* model);
+	JsonDataModel read(std::istream& inputStream) const;
+	void write(std::ostream& outputStream, JsonNode* model) const;
 };

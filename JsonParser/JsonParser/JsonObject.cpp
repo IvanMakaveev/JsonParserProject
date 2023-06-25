@@ -211,7 +211,7 @@ void JsonObject::setElement(const MyString& elementKey, JsonNode* nodeToSet)
 	int memberIndex = getMemberIndex(elementKey);
 	if (memberIndex == -1)
 	{
-		throw std::invalid_argument("Cannot delete member with invalid member key!");
+		throw std::invalid_argument("Cannot set member with invalid member key!");
 	}
 
 	values[memberIndex] = std::move(ObjectValue(elementKey, nodeToSet));
